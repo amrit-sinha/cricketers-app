@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Button } from "../ui/button";
+import { Input } from "@/components/ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -65,7 +66,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex flex-col justify-start">
-      <div className="mb-4">
+      <div className="flex justify-start gap-4 mb-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">{`Filter by : ${filterType}`}</Button>
@@ -91,6 +92,14 @@ export function DataTable<TData, TValue>({
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
+        <Input
+          placeholder="Search names..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
       </div>
 
       <div className="rounded-md border">
