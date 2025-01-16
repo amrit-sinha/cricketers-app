@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { TPlayer } from "@/apis/types";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import PlayerDrawer from "./PlayerDrawer";
 
 export const columns: ColumnDef<TPlayer>[] = [
   {
@@ -16,6 +17,9 @@ export const columns: ColumnDef<TPlayer>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      return row.original.name && <PlayerDrawer name={row.original.name} />;
     },
   },
   {
