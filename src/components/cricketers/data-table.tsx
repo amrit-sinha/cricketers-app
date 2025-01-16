@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import {
   ColumnDef,
   SortingState,
@@ -39,29 +39,45 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [filterType, setFilterType] = React.useState<string>("none");
+  const [sortBy, setSortBy] = useState<SortingState>([]);
+  const [filterBy, setFilterBy] = useState<string>(
+    localStorage.getItem("filterBy") || "none"
+  );
+  const [searchBy, setSearchBy] = useState<string>(
+    localStorage.getItem("searchBy") || ""
+  );
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
+    onSortingChange: setSortBy,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     state: {
-      sorting,
+      sorting: sortBy,
     },
   });
 
-  const handleFilterTypeChange = (value: string) => {
-    if (value === "none") {
-      table.getColumn("type")?.setFilterValue(null);
-    } else {
-      table.getColumn("type")?.setFilterValue(value);
-    }
-    setFilterType(value);
+  useEffect(() => {
+    localStorage.setItem("searchBy", searchBy);
+    table.getColumn("name")?.setFilterValue(searchBy);
+  }, [searchBy, table]);
+
+  useEffect(() => {
+    localStorage.setItem("filterBy", filterBy);
+    table
+      .getColumn("type")
+      ?.setFilterValue(filterBy === "none" ? null : filterBy);
+  }, [filterBy, table]);
+
+  const filterTypeMap = {
+    none: "None",
+    batsman: "Batsman",
+    bowler: "Bowler",
+    allRounder: "All Rounder",
+    wicketKeeper: "Wicket Keeper",
   };
 
   return (
@@ -69,35 +85,29 @@ export function DataTable<TData, TValue>({
       <div className="flex justify-start gap-4 mb-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">{`Filter by : ${filterType}`}</Button>
+            <Button variant="outline">{`Filter by: ${
+              filterTypeMap[filterBy as keyof typeof filterTypeMap]
+            }`}</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuRadioGroup
-              value={filterType}
-              onValueChange={handleFilterTypeChange}
+              value={filterBy}
+              onValueChange={setFilterBy}
             >
-              <DropdownMenuRadioItem value="none">None</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="batsman">
-                Batsman
-              </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="bowler">
-                Bowler
-              </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="allRounder">
-                All Rounder
-              </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="wicketKeeper">
-                Wicket Keeper
-              </DropdownMenuRadioItem>
+              {Object.entries(filterTypeMap).map(([key, value]) => {
+                return (
+                  <DropdownMenuRadioItem key={key} value={key}>
+                    {value}
+                  </DropdownMenuRadioItem>
+                );
+              })}
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
         <Input
           placeholder="Search names..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
+          value={searchBy}
+          onChange={(event) => setSearchBy(event.target.value)}
           className="max-w-sm"
         />
       </div>
