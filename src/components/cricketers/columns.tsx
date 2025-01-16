@@ -19,7 +19,7 @@ export const columns: ColumnDef<TPlayer>[] = [
       );
     },
     cell: ({ row }) => {
-      return row.original.name && <PlayerDrawer name={row.original.name} />;
+      return row.original && <PlayerDrawer data={row.original} />;
     },
   },
   {
