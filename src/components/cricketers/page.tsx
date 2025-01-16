@@ -20,7 +20,6 @@ export default function CricketersList() {
           const age = new Date().getFullYear() - dob.getFullYear();
           return { ...player, age };
         });
-        console.log(updatedPlayers);
         setPlayers(updatedPlayers);
         setLoading(false);
       })

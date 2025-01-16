@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { TPlayer } from "@/apis/types";
+import { TPlayer, TPlayerType, TMayBe } from "@/apis/types";
+import getPlayers from "@/apis/get-players";
 import {
   Drawer,
   DrawerClose,
@@ -12,8 +13,26 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
+const fetchPlayers = async (
+  type: TMayBe<TPlayerType>,
+  excludeName: TMayBe<string>
+) => {
+  try {
+    const players = await getPlayers({ type });
+    return players
+      .filter((player) => player.name !== excludeName)
+      .map((player) => {
+        return { name: player.name, points: player.points, rank: player.rank };
+      });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
 const PlayerDrawer = ({ data }: { data: TPlayer }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [similarPlayers, setSimilarPlayers] = useState<TPlayer[]>([]);
 
   const updatedData = {
     ...data,
@@ -28,8 +47,16 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
     }
   }, [updatedData.name]);
 
-  const handleOpen = () => {
+  const handleOpen = async () => {
     setIsOpen(true);
+    try {
+      const similarPlayersData = await fetchPlayers(data.type, data.name);
+      setSimilarPlayers(
+        similarPlayersData ? similarPlayersData.slice(0, 5) : []
+      );
+    } catch (error) {
+      console.error("Failed to fetch similar players:", error);
+    }
     localStorage.setItem(
       `drawerState-${updatedData.name}`,
       JSON.stringify(true)
@@ -43,7 +70,6 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
       JSON.stringify(false)
     );
   };
-  console.log(updatedData);
 
   return (
     <>
@@ -65,6 +91,27 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
               <span>Age: {updatedData.age}</span>
             </DrawerDescription>
           </DrawerHeader>
+
+          <DrawerHeader>
+            <DrawerTitle>Similar Players</DrawerTitle>
+            <DrawerDescription className="flex flex-col gap-2">
+              {similarPlayers.length > 0 ? (
+                <ol className="list-decimal pl-6">
+                  {similarPlayers.map((player, index) => (
+                    <li key={index} className="mb-2">
+                      <span className="font-bold">{player.name} : </span>{" "}
+                      <span>
+                        Rank - {player.rank}, Points - {player.points}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <span>No similar players found.</span>
+              )}
+            </DrawerDescription>
+          </DrawerHeader>
+
           <DrawerFooter>
             <DrawerClose onClick={handleClose}>
               <Button variant="outline">Close</Button>
