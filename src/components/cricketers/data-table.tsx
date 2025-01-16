@@ -39,7 +39,9 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sortBy, setSortBy] = useState<SortingState>([]);
+  const [sortBy, setSortBy] = useState<SortingState>(
+    JSON.parse(localStorage.getItem("sortBy") || "[]")
+  );
   const [filterBy, setFilterBy] = useState<string>(
     localStorage.getItem("filterBy") || "none"
   );
@@ -59,6 +61,10 @@ export function DataTable<TData, TValue>({
       sorting: sortBy,
     },
   });
+
+  useEffect(() => {
+    localStorage.setItem("sortBy", JSON.stringify(sortBy));
+  }, [sortBy]);
 
   useEffect(() => {
     localStorage.setItem("searchBy", searchBy);
