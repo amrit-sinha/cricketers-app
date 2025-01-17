@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { typeMap } from "@/lib/utils";
 import {
   ColumnDef,
   SortingState,
@@ -78,21 +79,13 @@ export function DataTable<TData, TValue>({
       ?.setFilterValue(filterBy === "none" ? null : filterBy);
   }, [filterBy, table]);
 
-  const filterTypeMap = {
-    none: "None",
-    batsman: "Batsman",
-    bowler: "Bowler",
-    allRounder: "All Rounder",
-    wicketKeeper: "Wicket Keeper",
-  };
-
   return (
     <div className="flex flex-col justify-start">
       <div className="flex justify-start gap-4 mb-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">{`Filter by: ${
-              filterTypeMap[filterBy as keyof typeof filterTypeMap]
+              typeMap[filterBy as keyof typeof typeMap]
             }`}</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
@@ -100,7 +93,7 @@ export function DataTable<TData, TValue>({
               value={filterBy}
               onValueChange={setFilterBy}
             >
-              {Object.entries(filterTypeMap).map(([key, value]) => {
+              {Object.entries(typeMap).map(([key, value]) => {
                 return (
                   <DropdownMenuRadioItem key={key} value={key}>
                     {value}
