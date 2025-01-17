@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { TPlayer, TPlayerType, TMayBe } from "@/apis/types";
 import getPlayers from "@/apis/get-players";
+import { Skeleton } from "../ui/skeleton";
 import {
   Drawer,
   DrawerClose,
@@ -16,7 +17,7 @@ import {
 const fetchPlayers = async (
   type: TMayBe<TPlayerType>,
   excludeName: TMayBe<string>
-) => {
+): Promise<TPlayer[] | []> => {
   try {
     const players = await getPlayers({ type });
     return players
@@ -26,13 +27,17 @@ const fetchPlayers = async (
       });
   } catch (error) {
     console.error(error);
-    return null;
+    return [];
   }
 };
 
 const PlayerDrawer = ({ data }: { data: TPlayer }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [similarPlayers, setSimilarPlayers] = useState<TPlayer[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [similarPlayers, setSimilarPlayers] = useState<TPlayer[]>(() => {
+    const storedData = localStorage.getItem("similarPlayers");
+    return storedData ? JSON.parse(storedData) : [];
+  });
 
   const updatedData = {
     ...data,
@@ -44,23 +49,29 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
     const savedState = localStorage.getItem(`drawerState-${updatedData.name}`);
     if (savedState) {
       setIsOpen(JSON.parse(savedState));
+
+      setLoading(true);
+      const similarPlayersData = localStorage.getItem("similarPlayers");
+      setSimilarPlayers(
+        similarPlayersData ? JSON.parse(similarPlayersData) : []
+      );
+      setLoading(false);
     }
   }, [updatedData.name]);
 
   const handleOpen = async () => {
     setIsOpen(true);
-    try {
-      const similarPlayersData = await fetchPlayers(data.type, data.name);
-      setSimilarPlayers(
-        similarPlayersData ? similarPlayersData.slice(0, 5) : []
-      );
-    } catch (error) {
-      console.error("Failed to fetch similar players:", error);
-    }
+    setLoading(true);
     localStorage.setItem(
       `drawerState-${updatedData.name}`,
       JSON.stringify(true)
     );
+
+    let similarPlayersData = await fetchPlayers(data.type, data.name);
+    similarPlayersData = similarPlayersData.slice(0, 5);
+    setSimilarPlayers(similarPlayersData);
+    localStorage.setItem("similarPlayers", JSON.stringify(similarPlayersData));
+    setLoading(false);
   };
 
   const handleClose = () => {
@@ -95,7 +106,15 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
           <DrawerHeader>
             <DrawerTitle>Similar Players</DrawerTitle>
             <DrawerDescription className="flex flex-col gap-2">
-              {similarPlayers.length > 0 ? (
+              {loading ? (
+                <div className="flex items-center space-x-4">
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                    <Skeleton className="h-4 w-[150px]" />
+                  </div>
+                </div>
+              ) : similarPlayers.length > 0 ? (
                 <ol className="list-decimal pl-6">
                   {similarPlayers.map((player, index) => (
                     <li key={index} className="mb-2">
