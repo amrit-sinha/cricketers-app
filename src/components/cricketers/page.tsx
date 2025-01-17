@@ -40,9 +40,14 @@ export default function CricketersList() {
 
   return (
     <div className="container mx-auto py-10">
-      <Button variant="outline" size="icon" onClick={handleRefresh}>
-        <RefreshCw />
-      </Button>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold inline-block px-6 py-3 border-2 border-border rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow">
+          Indian Cricket Team
+        </h1>
+        <Button variant="outline" size="icon" onClick={handleRefresh}>
+          <RefreshCw />
+        </Button>
+      </div>
       {loading ? (
         <div className="flex items-center space-x-4">
           <Skeleton className="h-12 w-12 rounded-full" />
