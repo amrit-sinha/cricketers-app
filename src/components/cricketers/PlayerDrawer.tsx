@@ -93,10 +93,10 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
             <DrawerTitle className="flex justify-center">
               {updatedData.name}
             </DrawerTitle>
-            <DrawerDescription className="flex justify-center text-base italic text-gray-800 my-4">
+            <DrawerDescription className="flex justify-center text-base italic text-gray-800 dark:text-white my-4">
               {updatedData.description}
             </DrawerDescription>
-            <DrawerDescription className="flex justify-center gap-4 text-base text-gray-800">
+            <DrawerDescription className="flex justify-center gap-4 text-base text-gray-800 dark:text-white">
               <span>Type: {updatedData.type}</span>
               <span>Points: {updatedData.points}</span>
               <span>Rank: {updatedData.rank}</span>
