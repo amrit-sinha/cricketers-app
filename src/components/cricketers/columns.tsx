@@ -3,6 +3,7 @@ import { TPlayer } from "@/apis/types";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PlayerDrawer from "./PlayerDrawer";
+import { typeMap } from "@/lib/utils";
 
 export const columns: ColumnDef<TPlayer>[] = [
   {
@@ -25,6 +26,9 @@ export const columns: ColumnDef<TPlayer>[] = [
   {
     accessorKey: "type",
     header: "Type",
+    cell: ({ row }) => {
+      return row.original.type && typeMap[row.original.type];
+    },
   },
   {
     accessorKey: "points",

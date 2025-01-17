@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { TPlayer, TPlayerType, TMayBe } from "@/apis/types";
 import getPlayers from "@/apis/get-players";
 import { Skeleton } from "../ui/skeleton";
+import { typeMap } from "@/lib/utils";
 import {
   Drawer,
   DrawerClose,
@@ -41,6 +42,7 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
 
   const updatedData = {
     ...data,
+    type: data.type ? typeMap[data.type] : "",
     dob: new Date(Number(data.dob)).toLocaleDateString(),
     age: new Date().getFullYear() - new Date(Number(data.dob)).getFullYear(),
   };
