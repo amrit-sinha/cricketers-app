@@ -42,7 +42,7 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
 
   const updatedData = {
     ...data,
-    type: data.type ? typeMap[data.type] : "",
+    type: data.type ? typeMap[data.type] : "N/A",
     dob: new Date(Number(data.dob)).toLocaleDateString(),
     age: new Date().getFullYear() - new Date(Number(data.dob)).getFullYear(),
   };

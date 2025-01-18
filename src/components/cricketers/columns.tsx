@@ -28,7 +28,7 @@ export const columns: ColumnDef<TPlayer>[] = [
     accessorKey: "type",
     header: "Type",
     cell: ({ row }) => {
-      return row.original.type && typeMap[row.original.type];
+      return row.original.type ? typeMap[row.original.type] : "N/A";
     },
   },
   {
