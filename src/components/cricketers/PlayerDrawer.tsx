@@ -105,7 +105,7 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
 
           <DrawerHeader>
             <DrawerTitle>Similar Players</DrawerTitle>
-            <DrawerDescription className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               {loading ? (
                 <div className="flex items-center space-x-4">
                   <div className="space-y-2">
@@ -118,8 +118,8 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
                 <ol className="list-decimal pl-6">
                   {similarPlayers.map((player, index) => (
                     <li key={index} className="mb-2">
-                      <span className="font-bold">{player.name} : </span>{" "}
-                      <span>
+                      <span className="font-bold text-md text-gray-700">{player.name} : </span>{" "}
+                      <span className="text-sm text-gray-600">
                         Rank - {player.rank}, Points - {player.points}
                       </span>
                     </li>
@@ -128,7 +128,7 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
               ) : (
                 <span>No similar players found.</span>
               )}
-            </DrawerDescription>
+            </div>
           </DrawerHeader>
 
           <DrawerFooter>
