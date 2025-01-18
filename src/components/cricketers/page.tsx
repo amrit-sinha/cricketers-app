@@ -10,7 +10,6 @@ import { Switch } from "@/components/ui/switch"; // Adjust the import path as ne
 
 export default function CricketersList() {
   const [players, setPlayers] = useState<TPlayer[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(
     () => localStorage.getItem("theme") === "dark"
@@ -33,7 +32,7 @@ export default function CricketersList() {
     getPlayers()
       .then((players) => {
         const updatedPlayers = players.map((player) => {
-          const dob = new Date(player.dob);
+          const dob = new Date(Number(player.dob));
           const age = new Date().getFullYear() - dob.getFullYear();
           return { ...player, age };
         });
@@ -41,7 +40,7 @@ export default function CricketersList() {
         setLoading(false);
       })
       .catch((error) => {
-        setError(error.message);
+        console.error("Error fetching players: ", error);
         setLoading(false);
       });
   };

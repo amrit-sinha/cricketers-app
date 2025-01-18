@@ -84,7 +84,7 @@ export function DataTable<TData, TValue>({
       <div className="flex justify-start gap-4 mb-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">{`Filter by: ${
+            <Button variant="outline">{`Filter by Type: ${
               typeMap[filterBy as keyof typeof typeMap]
             }`}</Button>
           </DropdownMenuTrigger>
