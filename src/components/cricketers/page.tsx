@@ -8,6 +8,7 @@ import { RefreshCw, Sun, Moon } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import { Switch } from "@/components/ui/switch"; // Adjust the import path as needed
 
+/** Main component displaying the Indian Cricket Team roster */
 export default function CricketersList() {
   const [players, setPlayers] = useState<TPlayer[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,6 +28,7 @@ export default function CricketersList() {
     fetchPlayers();
   }, []);
 
+  /** Fetches the players from the get-players api */
   const fetchPlayers = () => {
     setLoading(true);
     getPlayers()
@@ -45,11 +47,13 @@ export default function CricketersList() {
       });
   };
 
+  /** Refreshes the players list */
   const handleRefresh = () => {
     setPlayers([]);
     fetchPlayers();
   };
 
+  /** Toggles dark mode */
   const toggleDarkMode = () => {
     setIsDarkMode((prevMode) => {
       const newMode = !prevMode;

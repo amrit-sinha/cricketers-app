@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import PlayerDrawer from "./PlayerDrawer";
 import { typeMap } from "@/lib/utils";
 
+/** Defines sortable column configurations for the cricket players table */
 export const columns: ColumnDef<TPlayer>[] = [
   {
     accessorKey: "name",

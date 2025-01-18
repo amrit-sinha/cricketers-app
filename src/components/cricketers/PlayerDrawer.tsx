@@ -15,6 +15,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
+/** Fetches players of the same type, excluding the current player */
 const fetchPlayers = async (
   type: TMayBe<TPlayerType>,
   excludeName: TMayBe<string>
@@ -32,6 +33,7 @@ const fetchPlayers = async (
   }
 };
 
+/** Displays detailed player information in a drawer with similar players list */
 const PlayerDrawer = ({ data }: { data: TPlayer }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -60,6 +62,7 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
     }
   }, [updatedData.name]);
 
+  /** Handles drawer open and fetches similar players */
   const handleOpen = async () => {
     setIsOpen(true);
     setLoading(true);
@@ -72,6 +75,7 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
     setLoading(false);
   };
 
+  /** Closes drawer and cleans up localStorage */
   const handleClose = () => {
     setIsOpen(false);
     localStorage.removeItem("currentPlayerDrawer");
@@ -118,7 +122,9 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
                 <ol className="list-decimal pl-6">
                   {similarPlayers.map((player, index) => (
                     <li key={index} className="mb-2">
-                      <span className="font-bold text-md text-gray-700">{player.name} : </span>{" "}
+                      <span className="font-bold text-md text-gray-700">
+                        {player.name} :{" "}
+                      </span>{" "}
                       <span className="text-sm text-gray-600">
                         Rank - {player.rank}, Points - {player.points}
                       </span>

@@ -31,21 +31,28 @@ import {
 import { Button } from "../ui/button";
 import { Input } from "@/components/ui/input";
 
+/** Props for the DataTable component */
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
+/** Generic data table with sorting, filtering, and pagination capabilities */
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  /** Current table sorting configuration */
   const [sortBy, setSortBy] = useState<SortingState>(
     JSON.parse(localStorage.getItem("sortBy") || "[]")
   );
+
+  /** Current type filter configuration */
   const [filterBy, setFilterBy] = useState<string>(
     localStorage.getItem("filterBy") || "none"
   );
+
+  /** Current search configuration */
   const [searchBy, setSearchBy] = useState<string>(
     localStorage.getItem("searchBy") || ""
   );
