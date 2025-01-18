@@ -48,10 +48,9 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
   };
 
   useEffect(() => {
-    const savedState = localStorage.getItem(`drawerState-${updatedData.name}`);
-    if (savedState) {
-      setIsOpen(JSON.parse(savedState));
-
+    const currentPlayerDrawer = localStorage.getItem("currentPlayerDrawer");
+    if (currentPlayerDrawer === updatedData.name) {
+      setIsOpen(true);
       setLoading(true);
       const similarPlayersData = localStorage.getItem("similarPlayers");
       setSimilarPlayers(
@@ -64,10 +63,7 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
   const handleOpen = async () => {
     setIsOpen(true);
     setLoading(true);
-    localStorage.setItem(
-      `drawerState-${updatedData.name}`,
-      JSON.stringify(true)
-    );
+    localStorage.setItem("currentPlayerDrawer", String(updatedData.name));
 
     let similarPlayersData = await fetchPlayers(data.type, data.name);
     similarPlayersData = similarPlayersData.slice(0, 5);
@@ -78,10 +74,7 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
 
   const handleClose = () => {
     setIsOpen(false);
-    localStorage.setItem(
-      `drawerState-${updatedData.name}`,
-      JSON.stringify(false)
-    );
+    localStorage.removeItem("currentPlayerDrawer");
   };
 
   return (
