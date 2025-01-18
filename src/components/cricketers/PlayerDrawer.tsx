@@ -87,7 +87,12 @@ const PlayerDrawer = ({ data }: { data: TPlayer }) => {
   return (
     <>
       <Drawer open={isOpen} onOpenChange={setIsOpen} onClose={handleClose}>
-        <DrawerTrigger onClick={handleOpen}>{updatedData.name}</DrawerTrigger>
+        <DrawerTrigger
+          className="hover:underline underline-offset-1"
+          onClick={handleOpen}
+        >
+          {updatedData.name}
+        </DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle className="flex justify-center">

@@ -12,6 +12,7 @@ export const columns: ColumnDef<TPlayer>[] = [
       return (
         <Button
           variant="ghost"
+          className="p-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
@@ -40,6 +41,7 @@ export const columns: ColumnDef<TPlayer>[] = [
       return (
         <Button
           variant="ghost"
+          className="p-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Rank
@@ -54,6 +56,7 @@ export const columns: ColumnDef<TPlayer>[] = [
       return (
         <Button
           variant="ghost"
+          className="p-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Age
